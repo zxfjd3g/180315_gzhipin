@@ -3,13 +3,16 @@
  */
 import React, {Component} from 'react'
 import {NavBar, List, WingBlank, WhiteSpace, InputItem, Button, Radio} from 'antd-mobile'
-import {reqRegister} from '../../api'
+import {connect} from 'react-redux'
+import {Redirect} from 'react-router-dom'
 
 import Logo from '../../components/logo/logo'
+import {register} from '../../redux/actions'
 
 // const Item = List.Item
 
-export default class Register extends Component {
+// Register是UI组件
+class Register extends Component {
 
   // 定义初始化状态
   state = {
@@ -38,15 +41,7 @@ export default class Register extends Component {
 
   register = () => {
     console.log(this.state)
-    reqRegister(this.state).then(response => {
-      const result = response.data // {code: 0/1, data/msg: value}
-      if(result.code===0) {// 成功了
-        console.log(result.data)
-        alert('注册成功')
-      } else { // 失败
-        alert(result.msg)
-      }
-    })
+    this.props.register(this.state)
   }
 
   goLogin = () => {
@@ -56,12 +51,19 @@ export default class Register extends Component {
 
   render() {
     const {type} = this.state
+    const {msg, redirectTo} = this.props.user
+    // 如果redirectTo有值
+    if(redirectTo) {
+      // 跳转到redirectTo
+      return <Redirect to={redirectTo}/>
+    }
     return (
       <div>
         <NavBar>用户注册</NavBar>
         <Logo/>
         <WingBlank>
           <List>
+            <p className='error-msg'>{msg}</p>
             <WhiteSpace/>
             <InputItem placeholder='请输入用户名' onChange={val=> this.handleChange('username', val)}>用户名:</InputItem>
             <WhiteSpace/>
@@ -84,3 +86,22 @@ export default class Register extends Component {
     )
   }
 }
+
+// 向外暴露是包含UI组件的容器组件
+export default connect(
+  state => ({user: state.user}),
+  {register}
+  /*
+  function register(user) {
+      dispatch(register(user))
+    }
+   */
+)(Register)
+
+/*
+组件的render什么时候执行?
+1. 初始显示
+2. 更新显示
+    1). 自身状态变化 : this.setState()
+    2). 接收的外部数据属性变化了
+ */
