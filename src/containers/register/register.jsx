@@ -3,6 +3,7 @@
  */
 import React, {Component} from 'react'
 import {NavBar, List, WingBlank, WhiteSpace, InputItem, Button, Radio} from 'antd-mobile'
+import {reqRegister} from '../../api'
 
 import Logo from '../../components/logo/logo'
 
@@ -37,6 +38,15 @@ export default class Register extends Component {
 
   register = () => {
     console.log(this.state)
+    reqRegister(this.state).then(response => {
+      const result = response.data // {code: 0/1, data/msg: value}
+      if(result.code===0) {// 成功了
+        console.log(result.data)
+        alert('注册成功')
+      } else { // 失败
+        alert(result.msg)
+      }
+    })
   }
 
   goLogin = () => {
