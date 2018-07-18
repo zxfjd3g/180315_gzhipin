@@ -16,7 +16,7 @@ function user (state = initUser, action) {
   switch (action.type) {
     case AUTH_SUCCESS:
       const user = action.data
-      return {...user, redirectTo: '/'}
+      return {...user, redirectTo: getRedirectTo(user.type, user.header)}
     case ERROR_MSG:
       const msg = action.data
       return {...state, msg}
@@ -31,3 +31,28 @@ function user (state = initUser, action) {
 export default combineReducers({
   user
 })
+
+
+/*
+1. 考虑信息是否完善: head
+2. 用户类型: type
+/dashen
+/laoban
+/dasheninfo
+/laobaninfo
+
+ */
+function getRedirectTo(type, header) {
+  let path = ''
+  if(type==='dashen') {
+    path = '/dashen'
+  } else {
+    path = '/laoban'
+  }
+
+  if(!header) {
+    path += 'info'
+  }
+
+  return path
+}
