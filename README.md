@@ -64,3 +64,35 @@
         redux: createStore()/combineReducers()/applyMiddleware()
         react-redux: <Provider store={store}> / connect()(Xxx)
         4个重要模块: reducers/store/actions/action-types
+        
+# day02
+## 1. 登陆/注册界面
+    1). 创建3个1级路由: main/login/register
+    2). 完成登陆/注册的静态组件
+        antd组件: NavBar/WingBlank/WhiteSpace/List/InputItem/Radio/Button
+        路由跳转: this.props.history.replace('/login')
+        收集表单输入数据: state/onChange/变量属性名
+        抽取组件: logo
+
+## 2. 创建后台应用
+    1). 使用webstorm创建基于node+express的后台应用
+    2). 自定义测试路由
+    3). 使用nodemon库来实例自动重运行
+
+## 3. 使用mongoose操作数据库
+    1). 连接数据库
+    2). 定义schema和Model
+    3). 通过Model函数对象或Model的实例的方法对集合数据进行CRUD操作 
+    
+## 4. 注册/登陆后台处理
+    1). models.js
+        连接数据库: mongoose.connect(url)
+        定义文档结构: schema
+        定义操作集合的model: UserModel
+        const {UserModel, ChatModel} = require('./models')
+   
+    2). routes/index.js
+        根据接口编写路由的定义
+        注册: 流程
+        登陆: 流程
+        响应数据结构: {code: 0, data: user}, {code: 1, msg: 'xxx'}
