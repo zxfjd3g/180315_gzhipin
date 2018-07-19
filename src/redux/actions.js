@@ -6,7 +6,8 @@
 import {
   reqRegister,
   reqLogin,
-  reqUpdateUser
+  reqUpdateUser,
+  reqUser
 } from '../api'
 
 import {
@@ -120,6 +121,21 @@ export function updateUser(user) {
   return async dispatch => {
     const response = await reqUpdateUser(user)
     const result = response.data // {code: 0, data: user} {code:1, msg: 'xxx'}
+    if(result.code===0) {
+      dispatch(receiveUser(result.data))
+    } else {
+      dispatch(resetUser(result.msg))
+    }
+  }
+}
+
+/*
+获取当前用户的异步action
+ */
+export function getUser () {
+  return async dispatch => {
+    const response = await reqUser()
+    const result = response.data
     if(result.code===0) {
       dispatch(receiveUser(result.data))
     } else {

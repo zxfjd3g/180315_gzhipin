@@ -2,8 +2,10 @@
 主界面组件
  */
 import React, {Component} from 'react'
-import {Switch, Route} from 'react-router-dom'
+import {Switch, Route, Redirect} from 'react-router-dom'
 import {NavBar} from 'antd-mobile'
+import Cookies from 'js-cookie'
+import {connect} from 'react-redux'
 
 import LaobanInfo from '../laoban-info/laoban-info'
 import DashenInfo from '../dashen-info/dashen-info'
@@ -12,8 +14,13 @@ import Dashen from '../dashen/dashen'
 import Message from '../message/message'
 import Personal from '../personal/personal'
 import NavFooter from '../../components/nav-footer/nav-footer'
+import NotFound from '../../components/not-found/not-found'
 
-export default class Main extends Component {
+import {getUser} from '../../redux/actions'
+import {getRedirectTo} from '../../utils'
+
+
+class Main extends Component {
 
   // 给组件对象添加一个属性navList: 后面访问: this.navList
   navList = [
@@ -47,11 +54,38 @@ export default class Main extends Component {
     }
   ]
 
+  componentDidMount () {
+    // 当前还没有登陆, 但前面登陆过-->发异步ajax请求, 获取当前用户信息
+    const id = this.props.user._id
+    const userid = Cookies.get('userid')
+    if(!id && userid) {
+      this.props.getUser()
+    }
+
+  }
+
   render () {
 
-    // 得到当前路由信息对象
+    // 1. 如果从来没有登陆过(cookie中没有userid), 自动跳转到login
+    const userid = Cookies.get('userid')
+    if(!userid) {
+      return <Redirect to='/login'/>
+    }
+    // 2. 登陆过(cookie中有userid), 但当前还没有登陆(state.user._id没有), 需要实现自动登陆(发请求获取当前user)
+    const {user} = this.props
+    if(!user._id) {
+      // render中不能发送ajax请求
+      return null // 暂时不做任何显示
+    }
+    // 3. 当前已经登陆了, 如果请求的是根路径: '/', 自动跳转到对应的路由(getRedirectTo())
     // 得到当前请求的路径
     const path = this.props.location.pathname
+    if(path==='/') {
+      return <Redirect to={getRedirectTo(user.type, user.header)}/>
+    }
+
+    // 得到当前路由信息对象
+
     // 从navList中找出对应的nav    find(): 返回一个回调函数返回true的元素
     const currentNav = this.navList.find(function (nav, index) {// 回调函数
         return path===nav.path
@@ -69,12 +103,26 @@ export default class Main extends Component {
           <Route path='/dashen' component={Dashen}/>
           <Route path='/message' component={Message}/>
           <Route path='/personal' component={Personal}/>
+          <Route component={NotFound}/>
         </Switch>
         {currentNav ? <NavFooter/> : null}
       </div>
     )
   }
 }
+
+export default connect(
+  state => ({user: state.user}),
+  {getUser}
+)(Main)
+
+
+
+/*
+1. 如果从来没有登陆过(cookie中没有userid), 自动跳转到login
+2. 登陆过(cookie中有userid), 但当前还没有登陆(state.user._id没有), 需要实现自动登陆(发请求获取当前user)
+3. 当前已经登陆了, 如果请求的是根路径: '/', 自动跳转到对应的路由(getRedirectTo())
+ */
 
 /*
 声明式编程: what(什么工作)  填空题

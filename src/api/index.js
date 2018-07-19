@@ -16,6 +16,9 @@ export const reqLogin = (username, password) => ajax(BASE+'/login', {username, p
 // 更新用户信息
 export const reqUpdateUser = (user) => ajax(BASE+'/update', user,'POST')
 
+// 获取当前用户
+export const reqUser = () => ajax(BASE+'/user')
+
 /*
 模块1: export xxx  export yyy: 向外暴露的是 {xxx, yyy}
 模块2: export default xxx: 向外暴露的是xxx
