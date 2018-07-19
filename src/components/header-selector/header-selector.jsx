@@ -23,17 +23,19 @@ export default class HeaderSelector extends Component {
     this.setState({icon})
   }
 
-  render () {
-
-    const headerList = []
+  constructor (props) {
+    super(props)
+    this.headerList = []
     for (var i = 0; i < 20; i++) {
       const text = '头像'+(i+1)
-      headerList.push({
+      this.headerList.push({
         text,
         icon: require(`./imgs/${text}.png`)
       })
     }
+  }
 
+  render () {
     const {icon} = this.state
     // debugger
     const header = icon ? <span>已选择头像: <img src={icon}/></span>: '请选择头像:'
@@ -41,7 +43,7 @@ export default class HeaderSelector extends Component {
       <List renderHeader={() => header}>
         <Grid columnNum={5}
               onClick={this.selectHeader}
-              data={headerList}/>
+              data={this.headerList}/>
       </List>
     )
   }

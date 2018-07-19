@@ -25,6 +25,7 @@ class Login extends Component {
 
   login = () => {
     this.props.login(this.state)
+    //login(this.state)
   }
 
   goRegister = () => {
@@ -33,7 +34,7 @@ class Login extends Component {
   }
 
   render() {
-    const {msg, redirectTo} = this.props.user
+    const {msg, redirectTo} = this.props
     if(redirectTo) {
       return <Redirect to={redirectTo}/>
     }
@@ -64,3 +65,11 @@ export default connect(
   state => ({user: state.user}),
   {login}
 )(Login)
+
+/*
+a = a + 3
+a.xx
+a()
+fn(a)
+{xx:a}
+ */
