@@ -1,8 +1,11 @@
 import {combineReducers} from 'redux'
+import {getRedirectTo} from '../utils'
 
 import {
   AUTH_SUCCESS,
-  ERROR_MSG
+  ERROR_MSG,
+  RECEIVE_USER,
+  RESET_USER
 } from './action-types'
 
 // 产生user状态的reducer
@@ -20,6 +23,10 @@ function user (state = initUser, action) {
     case ERROR_MSG:
       const msg = action.data
       return {...state, msg}
+    case RECEIVE_USER:
+      return action.data
+    case RESET_USER:
+      return {...initUser, msg: action.data}
     default:
       return state
   }
@@ -32,27 +39,3 @@ export default combineReducers({
   user
 })
 
-
-/*
-1. 考虑信息是否完善: head
-2. 用户类型: type
-/dashen
-/laoban
-/dasheninfo
-/laobaninfo
-
- */
-function getRedirectTo(type, header) {
-  let path = ''
-  if(type==='dashen') {
-    path = '/dashen'
-  } else {
-    path = '/laoban'
-  }
-
-  if(!header) {
-    path += 'info'
-  }
-
-  return path
-}

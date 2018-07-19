@@ -13,6 +13,8 @@ export const reqRegister = ({username, password, type}) => ajax(BASE+'/register'
 // 请求登陆接口
 export const reqLogin = (username, password) => ajax(BASE+'/login', {username, password}, 'POST')
 
+// 更新用户信息
+export const reqUpdateUser = (user) => ajax(BASE+'/update', user,'POST')
 
 /*
 模块1: export xxx  export yyy: 向外暴露的是 {xxx, yyy}
