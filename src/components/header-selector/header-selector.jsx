@@ -30,7 +30,7 @@ export default class HeaderSelector extends Component {
       const text = '头像'+(i+1)
       this.headerList.push({
         text,
-        icon: require(`./imgs/${text}.png`)
+        icon: require(`../../assets/imgs/${text}.png`)
       })
     }
   }
