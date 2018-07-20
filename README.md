@@ -97,8 +97,72 @@
         登陆: 流程
         响应数据结构: {code: 0, data: user}, {code: 1, msg: 'xxx'}
         
+## day03   
+
+## 1. 注册/登陆前台处理
+    1). ajax
+        ajax请求函数(通用): 使用axios库, 返回的是promise对象
+        后台接口请求函数: 针对具体接口定义的ajax请求函数, 返回的是promise对象
+        代理: 跨域问题/配置代理解决
+        await/async: 同步编码方式实现异步ajax请求 
+    2). redux
+        store.js
+          生成并暴露一个store管理对象
+        reducers.js
+          包含n个reducer函数
+          根据老state和指定action来产生返回一个新的state
+        actions.js
+          包含n个action creator函数
+          同步action: 返回一个action对象({type: 'XXX', data: xxx})
+          异步action: 返回一个函数: disptach => {执行异步代理, 结束时dispatch一个同步action}
+        action-types.js
+          action的type名称常量
+    3). component
+        UI组件: 
+            组件内部没有使用任何redux相关的API
+            通过props接收容器组件传入的从redux获取数据
+            数据类型: 一般和函数
+        容器组件
+            connect(
+              state => ({user: state.user}),
+              {action1, action2}
+            )(UI组件) 
+    4). 其它问题
+        1). 动态计算成功后跳转的path: 设计工具函数
+        2). 前台表单验证: 在action中 
+               
+## 2. 完善用户信息
+    1). 用户信息完善界面路由组件: 
+        组件: dashen-info/laoban-info/header-selector
+        界面: Navbar/List/Grid/InputItem/Button/TextareaItem
+        收集用户输入数据: onChange监听/state 
+        注册2级路由: 在main路由组件
+    2). 登陆/注册成功后的跳转路由计算
+        定义工具函数
+        计算逻辑分析
+    3). 后台路由处理: 更新用户信息
+    4). 前台接口请求函数
+    5). 前台redux
+        action-types
+        异步action/同步action
+        reducer
+    6). 前台组件
+        UI组件包装生成容器组件
+        读取状态数据
+        更新状态
+
+## 3. 搭建整体界面
+    1). 拆分界面, 抽取组件(一般/路由)
+    1). 封装导航路由相关数据(数组/对象)
+    2). 设计整体main组件的逻辑
+        a. 是否登陆过
+        b. 当前是否已经登陆
+        c. 实现自动登陆
+        d. 根路径的自动跳转
+        e. 404页面的设计
         
-## 关于代理
+## 4. 几个需要理解的
+### 关于代理
     1). 代理的作用
         拦截前台应用发出的请求(3001), 转发请求到配置指定的地址(后台应用4000)
     2). 是什么
@@ -107,3 +171,10 @@
         前台应用的服务器上
     4). 配置代理
         告诉代理一些信息: 转发的目标地址
+### 回调函数的理解
+	1). 你定义的
+	2). 你没有调用
+	3). 但最终它执行了
+### 声明式与命令式编程
+    1). 命令式编程: what(什么工作) + how(流程) -->问答题
+    2). 声明式编程: what(什么工作)  -->填空题
