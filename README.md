@@ -110,6 +110,7 @@
           生成并暴露一个store管理对象
         reducers.js
           包含n个reducer函数
+          向外暴露一个整合后的reducer: combineReducers({reducer1, reducer2})
           根据老state和指定action来产生返回一个新的state
         actions.js
           包含n个action creator函数
@@ -137,16 +138,13 @@
         界面: Navbar/List/Grid/InputItem/Button/TextareaItem
         收集用户输入数据: onChange监听/state 
         注册2级路由: 在main路由组件
-    2). 登陆/注册成功后的跳转路由计算
-        定义工具函数
-        计算逻辑分析
-    3). 后台路由处理: 更新用户信息
-    4). 前台接口请求函数
-    5). 前台redux
+    2). 后台路由处理: 更新用户信息
+    3). 前台接口请求函数
+    4). 前台redux
         action-types
         异步action/同步action
         reducer
-    6). 前台组件
+    5). 前台组件
         UI组件包装生成容器组件
         读取状态数据
         更新状态
@@ -172,9 +170,14 @@
     4). 配置代理
         告诉代理一些信息: 转发的目标地址
 ### 回调函数的理解
-	1). 你定义的
-	2). 你没有调用
-	3). 但最终它执行了
+    1). 判断
+      1). 你定义的
+      2). 你没有调用
+      3). 但最终它执行了
+	2). 3个相关的问题
+	  它的作用?
+	  什么时候调用?
+	  this是谁?
 ### 声明式与命令式编程
     1). 命令式编程: what(什么工作) + how(流程) -->问答题
     2). 声明式编程: what(什么工作)  -->填空题
