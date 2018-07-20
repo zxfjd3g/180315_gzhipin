@@ -3,6 +3,8 @@
 同步action: 对象  (与action type一一对应)
 异步action: 函数
  */
+// 引入客户端io
+import io from 'socket.io-client'
 import {
   reqRegister,
   reqLogin,
@@ -158,5 +160,23 @@ export function getUserList(type) {
     if(result.code===0) {
       dispatch(receiveUserList(result.data))
     }
+  }
+}
+
+// 连接服务器, 得到代表连接的socket对象
+const socket = io('ws://localhost:4000')
+// 绑定接收服务器发送消息的监听(receiveMsg: chatMsg)
+socket.on('receiveMsg', (chatMsg) => {
+  console.log('receiveMsg', chatMsg)
+})
+/*
+向服务器发送socketio消息的异步action
+ */
+export function sendMessage({content, from, to}) {
+  return dispatch => {
+
+    // 向服务器端发消息
+    socket.emit('sendMsg', {content, from, to})
+    console.log('sendMsg', {content, from, to})
   }
 }
