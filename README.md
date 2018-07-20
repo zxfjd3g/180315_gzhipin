@@ -181,3 +181,42 @@
 ### 声明式与命令式编程
     1). 命令式编程: what(什么工作) + how(流程) -->问答题
     2). 声明式编程: what(什么工作)  -->填空题
+
+# day04
+## 1. nav-footer组件
+    1). 过滤navList
+    2). 包装一般组件使其可以访问路径相关属性: withRouter()
+    3). 通过js实现路由跳转: history.replace()
+
+## 2. 个人中心
+    读取user信息显示
+    退出登陆
+    
+## 3. 用户列表
+    为大神/老板列表组件抽取用户列表组件
+    异步读取指定类型用户列表数据
+        后台路由
+        api
+        redux
+        component
+
+## 4. 实时聊天
+    1). socket.io
+        实现实时聊天的库
+        包装的H5 WebSocket和轮询---> 兼容性/编码简洁性
+        包含2个包:
+          socket.io: 用于服务器端
+          socket.io-client: 用于客户端
+        基本思想: 远程自定义事件机制
+            on(name, function(data){}): 绑定监听
+            emit(name, data): 发送消息
+            
+            io: 服务器端核心的管理对象: 内部管理着n个连接对象(socket)
+            socket: 客户端与服务器的连接对象
+    2). 收发消息
+        前台应用
+            chat组件: 收集数据分发异步发消息的异步action
+            actions: 连接socketio服务器/ 发送消息
+        后台应用
+            models: 定义操作chats集合的model
+            socketIO: 监视连接 / 监听浏览器发送的聊天消息 / 保存聊天信息 / 向所有连接的浏览器端发消息
