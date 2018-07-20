@@ -103,7 +103,7 @@ class Main extends Component {
 
     return (
       <div>
-        {currentNav ? <NavBar>{currentNav.title}</NavBar> : null}
+        {currentNav ? <NavBar className='fix-top'>{currentNav.title}</NavBar> : null}
         <Switch>
           <Route path='/laobaninfo' component={LaobanInfo}/>
           <Route path='/dasheninfo' component={DashenInfo}/>

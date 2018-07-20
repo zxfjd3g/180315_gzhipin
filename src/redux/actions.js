@@ -7,14 +7,16 @@ import {
   reqRegister,
   reqLogin,
   reqUpdateUser,
-  reqUser
+  reqUser,
+  reqUsers
 } from '../api'
 
 import {
   AUTH_SUCCESS,
   ERROR_MSG,
   RESET_USER,
-  RECEIVE_USER
+  RECEIVE_USER,
+  RECEIVE_USER_LIST
 } from './action-types'
 
 // 成功的同步action
@@ -26,6 +28,8 @@ const errorMsg = (msg) => ({type: ERROR_MSG, data: msg})
 const receiveUser = (user) => ({type: RECEIVE_USER, data: user})
 // 重置用户的同步action
 export const resetUser = (msg) => ({type: RESET_USER, data: msg})
+// 接收用户列表的同步action
+const receiveUserList = (userList) => ({type:RECEIVE_USER_LIST, data: userList})
 
 
 /*
@@ -140,6 +144,19 @@ export function getUser () {
       dispatch(receiveUser(result.data))
     } else {
       dispatch(resetUser(result.msg))
+    }
+  }
+}
+
+/*
+获取指定分类的用户列表的异步action
+ */
+export function getUserList(type) {
+  return async dispatch => {
+    const response = await reqUsers(type)
+    const result = response.data
+    if(result.code===0) {
+      dispatch(receiveUserList(result.data))
     }
   }
 }

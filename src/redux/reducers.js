@@ -5,7 +5,8 @@ import {
   AUTH_SUCCESS,
   ERROR_MSG,
   RECEIVE_USER,
-  RESET_USER
+  RESET_USER,
+  RECEIVE_USER_LIST
 } from './action-types'
 
 // 产生user状态的reducer
@@ -33,9 +34,22 @@ function user (state = initUser, action) {
 }
 
 
+// 产生userList状态的reducer
+const initUserList = []
+function userList(state=initUserList, action) {
+  switch (action.type) {
+    case RECEIVE_USER_LIST:
+      return action.data
+    default:
+      return state
+  }
+}
+
+
 // 合并多个reducer, 生成一个新的reducer
 // 返回的状态, 是包含所有状态的对象: {user: xxx}
 export default combineReducers({
-  user
+  user,
+  userList
 })
 

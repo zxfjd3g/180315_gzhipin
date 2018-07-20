@@ -19,6 +19,9 @@ export const reqUpdateUser = (user) => ajax(BASE+'/update', user,'POST')
 // 获取当前用户
 export const reqUser = () => ajax(BASE+'/user')
 
+// 获取指定类型的用户列表
+export const reqUsers = (type) => ajax(BASE+'/userlist', {type})
+
 /*
 模块1: export xxx  export yyy: 向外暴露的是 {xxx, yyy}
 模块2: export default xxx: 向外暴露的是xxx
