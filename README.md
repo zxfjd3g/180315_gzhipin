@@ -185,7 +185,7 @@
 # day04
 ## 1. nav-footer组件
     1). 过滤navList
-    2). 包装一般组件使其可以访问路径相关属性: withRouter()
+    2). 包装一般组件使其可以访问路由相关属性: withRouter()
     3). 通过js实现路由跳转: history.replace()
 
 ## 2. 个人中心
@@ -208,14 +208,16 @@
           socket.io: 用于服务器端
           socket.io-client: 用于客户端
         基本思想: 远程自定义事件机制
+            绑定事件监听(订阅消息): 事件名(消息名), 回调函数
+            触发事件(发布消息): 事件名, 数据
             on(name, function(data){}): 绑定监听
             emit(name, data): 发送消息
-            
+           
             io: 服务器端核心的管理对象: 内部管理着n个连接对象(socket)
             socket: 客户端与服务器的连接对象
     2). 收发消息
         前台应用
-            chat组件: 收集数据分发异步发消息的异步action
+            chat组件: 收集数据分发发消息的异步action
             actions: 连接socketio服务器/ 发送消息
         后台应用
             models: 定义操作chats集合的model

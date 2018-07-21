@@ -6,7 +6,9 @@ import {
   ERROR_MSG,
   RECEIVE_USER,
   RESET_USER,
-  RECEIVE_USER_LIST
+  RECEIVE_USER_LIST,
+  RECEIVE_CHAT_MSG,
+  RECEIVE_CHAT_MSGS
 } from './action-types'
 
 // 产生user状态的reducer
@@ -46,10 +48,39 @@ function userList(state=initUserList, action) {
 }
 
 
+// 产生chat相关数据的reducer
+const initChat = {
+  users: {},
+  chatMsgs: [],
+  unReadCount: 0  // 总的未读数量
+}
+function chat(state=initChat, action) {
+  switch (action.type) {
+    case RECEIVE_CHAT_MSGS:
+      const {users, chatMsgs} = action.data
+      return {
+        users,
+        chatMsgs,
+        unReadCount: 0
+      }
+    case RECEIVE_CHAT_MSG:
+      const chatMsg = action.data
+      return {
+        users: state.users,
+        chatMsgs: [...state.chatMsgs, chatMsg],
+        unReadCount: 0
+      }
+    default:
+      return state
+  }
+}
+
+
 // 合并多个reducer, 生成一个新的reducer
 // 返回的状态, 是包含所有状态的对象: {user: xxx}
 export default combineReducers({
   user,
-  userList
+  userList,
+  chat
 })
 
