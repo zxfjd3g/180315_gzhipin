@@ -22,33 +22,42 @@ class Chat extends Component {
 
   render() {
     const targetId = this.props.match.params.userid
+    const {users, chatMsgs} = this.props.chat
+    const {user} = this.props
+    const meId = user._id
+    const chatId = [targetId, meId].sort().join('_') // chatId是当前聊天的标识
 
+    // 对chatMsgs进行过滤得到我与targetId的所有chatMsg的数组
+    const msgs = chatMsgs.filter(msg => msg.chat_id===chatId)
+    const targetHeader = users[targetId].header
+    const targetIcon = require(`../../assets/imgs/${targetHeader}.png`)
     return (
       <div id='chat-page'>
         <NavBar>{targetId}</NavBar>
         <List>
-          <Item
-            thumb={require('../../assets/imgs/头像1.png')}
-          >
-            你好
-          </Item>
-          <Item
-            thumb={require('../../assets/imgs/头像1.png')}
-          >
-            你好2
-          </Item>
-          <Item
-            className='chat-me'
-            extra='我'
-          >
-            很好
-          </Item>
-          <Item
-            className='chat-me'
-            extra='我'
-          >
-            很好2
-          </Item>
+          {
+            msgs.map(msg => {
+              if(msg.to===meId) { // 别人发给我的
+                return (
+                  <Item
+                    key={msg._id}
+                    thumb={targetIcon}
+                  >
+                    {msg.content}
+                  </Item>
+                )
+              } else { // 我发给别人的
+                return (
+                  <Item
+                    className='chat-me'
+                    extra='我'
+                  >
+                    {msg.content}
+                  </Item>
+                )
+              }
+            })
+          }
         </List>
 
         <div className='am-tab-bar'>
@@ -66,6 +75,6 @@ class Chat extends Component {
 }
 
 export default connect(
-  state => ({user: state.user}),
+  state => ({user: state.user, chat: state.chat}),
   {sendMessage}
 )(Chat)

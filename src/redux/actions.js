@@ -77,7 +77,7 @@ export function register(user) {
     const response = await reqRegister({username, password, type})
     const result = response.data
     if (result.code === 0) { // 成功
-      getChatMsgs(dispatch)
+      getChatMsgs(dispatch, result.data._id)
       // 分发成功的同步action
       dispatch(authSuccess(result.data))
     } else { // 失败
@@ -119,7 +119,7 @@ export function login(user) {
     const response = await reqLogin(username, password)
     const result = response.data
     if (result.code === 0) { // 成功
-      getChatMsgs(dispatch)
+      getChatMsgs(dispatch, result.data._id)
       // 分发成功的同步action
       dispatch(authSuccess(result.data))
     } else { // 失败
@@ -153,7 +153,7 @@ export function getUser () {
     const response = await reqUser()
     const result = response.data
     if(result.code===0) {
-      getChatMsgs(dispatch)
+      getChatMsgs(dispatch, result.data._id)
       dispatch(receiveUser(result.data))
     } else {
       dispatch(resetUser(result.msg))
@@ -178,12 +178,15 @@ export function getUserList(type) {
 const socket = io('ws://localhost:4000')
 
 
-function initIO(dispatch) {
+function initIO(dispatch, meId) {
   if(!io.socket) { // 保证on()只执行一次
     io.socket = socket
     // 绑定接收服务器发送消息的监听(receiveMsg: chatMsg)
     socket.on('receiveMsg', (chatMsg) => {
-      dispatch(receiveChatMsg(chatMsg))
+      if(meId===chatMsg.to || meId==chatMsg.from) {// 发给我的/我发去的
+        dispatch(receiveChatMsg(chatMsg))
+      }
+
     })
   }
 }
@@ -206,9 +209,9 @@ export function sendMessage({content, from, to}) {
 获取当前用户相关的所有聊天
 必须在cookie中有了userid之后才能调用
  */
-async function getChatMsgs(dispatch) {
+async function getChatMsgs(dispatch, meId) {
   // 绑定用于接收新消息的监听
-  initIO(dispatch)
+  initIO(dispatch, meId)
 
   const response = await reqChatMsgList()
   const result = response.data
