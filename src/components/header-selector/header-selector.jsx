@@ -38,7 +38,7 @@ export default class HeaderSelector extends Component {
   render () {
     const {icon} = this.state
     // debugger
-    const header = icon ? <span>已选择头像: <img src={icon}/></span>: '请选择头像:'
+    const header = icon ? <span>已选择头像: <img src={icon} alt='icon'/></span>: '请选择头像:'
     return (
       <List renderHeader={() => header}>
         <Grid columnNum={5}

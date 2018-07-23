@@ -11,7 +11,8 @@ import {
   reqUpdateUser,
   reqUser,
   reqUsers,
-  reqChatMsgList
+  reqChatMsgList,
+  reqReadChatMsg
 } from '../api'
 
 import {
@@ -21,7 +22,8 @@ import {
   RECEIVE_USER,
   RECEIVE_USER_LIST,
   RECEIVE_CHAT_MSGS,
-  RECEIVE_CHAT_MSG
+  RECEIVE_CHAT_MSG,
+  CHAT_MSG_READ
 } from './action-types'
 
 // 成功的同步action
@@ -37,9 +39,12 @@ export const resetUser = (msg) => ({type: RESET_USER, data: msg})
 const receiveUserList = (userList) => ({type:RECEIVE_USER_LIST, data: userList})
 
 //  接收消息列表的同步action
-const receiveChatMsgs = ({users, chatMsgs}) => ({type: RECEIVE_CHAT_MSGS, data: {users, chatMsgs}})
+const receiveChatMsgs = ({users, chatMsgs, meId}) => ({type: RECEIVE_CHAT_MSGS, data: {users, chatMsgs, meId}})
 //  接收一个消息的同步action
-const receiveChatMsg = (chatMsg) => ({type: RECEIVE_CHAT_MSG, data: chatMsg})
+const receiveChatMsg = (chatMsg, meId) => ({type: RECEIVE_CHAT_MSG, data: {chatMsg, meId}})
+
+// 一个聊天的消息更新为已读了
+const chatMsgRead = ({from, to, count}) => ({type: CHAT_MSG_READ, data: {from, to, count}})
 
 
 /*
@@ -184,7 +189,7 @@ function initIO(dispatch, meId) {
     // 绑定接收服务器发送消息的监听(receiveMsg: chatMsg)
     socket.on('receiveMsg', (chatMsg) => {
       if(meId===chatMsg.to || meId==chatMsg.from) {// 发给我的/我发去的
-        dispatch(receiveChatMsg(chatMsg))
+        dispatch(receiveChatMsg(chatMsg, meId))
       }
 
     })
@@ -204,7 +209,6 @@ export function sendMessage({content, from, to}) {
   }
 }
 
-
 /*
 获取当前用户相关的所有聊天
 必须在cookie中有了userid之后才能调用
@@ -217,6 +221,20 @@ async function getChatMsgs(dispatch, meId) {
   const result = response.data
   if(result.code===0) {
     const {users, chatMsgs} = result.data
-    dispatch(receiveChatMsgs({users, chatMsgs}))
+    dispatch(receiveChatMsgs({users, chatMsgs, meId}))
+  }
+}
+
+/*
+查看更新未读消息的异步action
+ */
+export function readChatMsg(from, to) {
+  return async dispatch => {
+    const response = await reqReadChatMsg(from)
+    const result = response.data
+    if(result.code===0) {
+      const count = result.data
+      dispatch(chatMsgRead({from, to, count}))
+    }
   }
 }

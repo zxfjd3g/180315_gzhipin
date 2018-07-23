@@ -14,7 +14,6 @@ const Brief = Item.Brief
 class Personal extends React.Component {
 
   logout = () => {
-    alert('---')
     Modal.alert('退出', '确认退出登陆吗?', [
       { text: '取消', onPress: () => console.log('cancel') },
       { text: '确定', onPress: () => {
@@ -29,7 +28,7 @@ class Personal extends React.Component {
   render() {
     const {username, header, post, info, salary, company} = this.props.user
     return (
-      <div>
+      <div style={{marginTop: 50}}>
         <Result
           img={<img src={require(`../../assets/imgs/${header}.png`)} style={{width: 50}} alt="header"/>}
           title={username}

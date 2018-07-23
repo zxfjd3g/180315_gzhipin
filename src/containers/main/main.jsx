@@ -73,7 +73,7 @@ class Main extends Component {
       return <Redirect to='/login'/>
     }
     // 2. 登陆过(cookie中有userid), 但当前还没有登陆(state.user._id没有), 需要实现自动登陆(发请求获取当前user)
-    const {user} = this.props
+    const {user, unReadCount} = this.props
     if(!user._id) {
       // render中不能发送ajax请求
       return null // 暂时不做任何显示
@@ -115,14 +115,14 @@ class Main extends Component {
           <Route path='/chat/:userid' component={Chat}/>
           <Route component={NotFound}/>
         </Switch>
-        {currentNav ? <NavFooter navList={navList}/> : null}
+        {currentNav ? <NavFooter unReadCount={unReadCount} navList={navList}/> : null}
       </div>
     )
   }
 }
 
 export default connect(
-  state => ({user: state.user}),
+  state => ({user: state.user, unReadCount: state.chat.unReadCount}),
   {getUser}
 )(Main)
 

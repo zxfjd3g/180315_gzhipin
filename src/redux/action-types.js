@@ -8,3 +8,4 @@ export const RESET_USER = 'reset_user' // 重置用户信息
 export const RECEIVE_USER_LIST = 'receive_user_list' // 接收用户列表
 export const RECEIVE_CHAT_MSGS = 'receive_chat_msgs' // 接收消息列表
 export const RECEIVE_CHAT_MSG = 'receive_chat_msg' // 接收一条消息
+export const CHAT_MSG_READ = 'chat_msg_read' // 一个聊天的消息已读了

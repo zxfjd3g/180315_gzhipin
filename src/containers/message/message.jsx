@@ -66,7 +66,7 @@ class Message extends Component {
     const {users, chatMsgs} = this.props.chat
     const {user} = this.props
     const meId = user._id
-    debugger
+    // debugger
     // 得到每个聊天的lastMsg组成的数组
     const lastMsgs = this.getLastMsgs(chatMsgs, meId)
 
@@ -89,6 +89,7 @@ class Message extends Component {
                 extra={<Badge text={msg.unReadCount}/>}
                 thumb={require(`../../assets/imgs/${header}.png`)}
                 arrow='horizontal'
+                onClick={() => this.props.history.push(`/chat/${targetId}`)}
               >
                 {msg.content}
                 <Brief>{username}</Brief>

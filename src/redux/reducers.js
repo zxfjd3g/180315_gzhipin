@@ -8,7 +8,8 @@ import {
   RESET_USER,
   RECEIVE_USER_LIST,
   RECEIVE_CHAT_MSG,
-  RECEIVE_CHAT_MSGS
+  RECEIVE_CHAT_MSGS,
+  CHAT_MSG_READ
 } from './action-types'
 
 // 产生user状态的reducer
@@ -57,18 +58,34 @@ const initChat = {
 function chat(state=initChat, action) {
   switch (action.type) {
     case RECEIVE_CHAT_MSGS:
-      const {users, chatMsgs} = action.data
+      var {users, chatMsgs, meId} = action.data
       return {
         users,
         chatMsgs,
-        unReadCount: 0
+        unReadCount: chatMsgs.reduce(function (preCount, msg) {
+          // msg是别人发给我的未读消息
+          return preCount + (!msg.read && msg.to===meId ? 1 : 0)
+        }, 0)
       }
     case RECEIVE_CHAT_MSG:
-      const chatMsg = action.data
+      var data = action.data
       return {
         users: state.users,
-        chatMsgs: [...state.chatMsgs, chatMsg],
-        unReadCount: 0
+        chatMsgs: [...state.chatMsgs, data.chatMsg],
+        unReadCount: state.unReadCount + (!data.chatMsg.read && data.chatMsg.to===data.meId ? 1 : 0)
+      }
+    case CHAT_MSG_READ:
+      const {from, to, count} = action.data
+      return {
+        users: state.users,
+        chatMsgs: state.chatMsgs.map(msg => {
+          if(msg.from===from && msg.to===to && !msg.read) {
+            // msg.read = true
+            return {...msg, read: true}
+          }
+          return msg
+        }),
+        unReadCount: state.unReadCount-count
       }
     default:
       return state
@@ -83,4 +100,3 @@ export default combineReducers({
   userList,
   chat
 })
-
